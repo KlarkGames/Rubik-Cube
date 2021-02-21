@@ -1,4 +1,8 @@
+package ru.spbstu.RubicCube;
+
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 public class Task {
@@ -11,36 +15,36 @@ public class Task {
 
         public enum Color {W, Y, R, O, G, B}
 
-        public Object[] white = {Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W};
-        public Object[] yellow = {Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y};
-        public Object[] red = {Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R};
-        public Object[] orange = {Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O};
-        public Object[] green = {Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G};
-        public Object[] blue = {Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B};
+        public Enum[] white = {Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W};
+        public Enum[] yellow = {Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y};
+        public Enum[] red = {Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R};
+        public Enum[] orange = {Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O};
+        public Enum[] green = {Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G};
+        public Enum[] blue = {Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B};
 
-        private Object[] whiteShadow = {Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W};
-        private Object[] yellowShadow = {Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y};
-        private Object[] redShadow = {Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R};
-        private Object[] orangeShadow = {Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O};
-        private Object[] greenShadow = {Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G};
-        private Object[] blueShadow = {Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B};
+        private Enum[] whiteShadow = {Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W};
+        private Enum[] yellowShadow = {Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y};
+        private Enum[] redShadow = {Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R};
+        private Enum[] orangeShadow = {Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O};
+        private Enum[] greenShadow = {Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G};
+        private Enum[] blueShadow = {Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B};
 
-        public Object front = Color.W;
-        public Object back = Color.Y;
-        public Object up = Color.G;
-        public Object down = Color.B;
-        public Object left = Color.R;
-        public Object right = Color.O;
+        public Enum front = Color.W;
+        public Enum back = Color.Y;
+        public Enum up = Color.G;
+        public Enum down = Color.B;
+        public Enum left = Color.R;
+        public Enum right = Color.O;
 
-        private Object frontShadow = Color.W;
-        private Object backShadow = Color.Y;
-        private Object upShadow = Color.G;
-        private Object downShadow = Color.B;
-        private Object leftShadow = Color.R;
-        private Object rightShadow = Color.O;
+        private Enum frontShadow = Color.W;
+        private Enum backShadow = Color.Y;
+        private Enum upShadow = Color.G;
+        private Enum downShadow = Color.B;
+        private Enum leftShadow = Color.R;
+        private Enum rightShadow = Color.O;
 
-        private Map<Object, Object[]> map = new HashMap<Object, Object[]>();
-        private Map<Object, Object[]> mapShadow = new HashMap<Object, Object[]>();
+        private Map<Enum, Enum[]> map = new HashMap<Enum, Enum[]>();
+        private Map<Enum, Enum[]> mapShadow = new HashMap<Enum, Enum[]>();
 
         public Cube() {
 
@@ -61,7 +65,7 @@ public class Task {
 
         @Override
         public String toString() {
-            Map<Object, Character> symbols = new HashMap<>();
+            Map<Enum, Character> symbols = new HashMap<>();
             symbols.put(Color.W, 'W');
             symbols.put(Color.Y, 'Y');
             symbols.put(Color.R, 'R');
@@ -69,28 +73,52 @@ public class Task {
             symbols.put(Color.B, 'B');
             symbols.put(Color.G, 'G');
 
-            return "      " + symbols.get(map.get(up)[0]) + symbols.get(map.get(up)[1]) + symbols.get(map.get(up)[2]) + "\n" +
-                    "      " + symbols.get(map.get(up)[3]) + symbols.get(map.get(up)[4]) + symbols.get(map.get(up)[5]) + "\n" +
-                    "      " + symbols.get(map.get(up)[6]) + symbols.get(map.get(up)[7]) + symbols.get(map.get(up)[8]) + "\n" +
-                    symbols.get(map.get(back)[0]) + symbols.get(map.get(back)[1]) + symbols.get(map.get(back)[2]) +
-                    symbols.get(map.get(left)[0]) + symbols.get(map.get(left)[1]) + symbols.get(map.get(left)[2]) +
-                    symbols.get(map.get(front)[0]) + symbols.get(map.get(front)[1]) + symbols.get(map.get(front)[2]) +
-                    symbols.get(map.get(right)[0]) + symbols.get(map.get(right)[1]) + symbols.get(map.get(right)[2]) + "\n" +
-                    symbols.get(map.get(back)[3]) + symbols.get(map.get(back)[4]) + symbols.get(map.get(back)[5]) +
-                    symbols.get(map.get(left)[3]) + symbols.get(map.get(left)[4]) + symbols.get(map.get(left)[5]) +
-                    symbols.get(map.get(front)[3]) + symbols.get(map.get(front)[4]) + symbols.get(map.get(front)[5]) +
-                    symbols.get(map.get(right)[3]) + symbols.get(map.get(right)[4]) + symbols.get(map.get(right)[5]) + "\n" +
-                    symbols.get(map.get(back)[6]) + symbols.get(map.get(back)[7]) + symbols.get(map.get(back)[8]) +
-                    symbols.get(map.get(left)[6]) + symbols.get(map.get(left)[7]) + symbols.get(map.get(left)[8]) +
-                    symbols.get(map.get(front)[6]) + symbols.get(map.get(front)[7]) + symbols.get(map.get(front)[8]) +
-                    symbols.get(map.get(right)[6]) + symbols.get(map.get(right)[7]) + symbols.get(map.get(right)[8]) + "\n" +
-                    "      " + symbols.get(map.get(down)[0]) + symbols.get(map.get(down)[1]) + symbols.get(map.get(down)[2]) + "\n" +
-                    "      " + symbols.get(map.get(down)[3]) + symbols.get(map.get(down)[4]) + symbols.get(map.get(down)[5]) + "\n" +
-                    "      " + symbols.get(map.get(down)[6]) + symbols.get(map.get(down)[7]) + symbols.get(map.get(down)[8]) + "\n";
+            String upString = Arrays.stream(map.get(up)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String downString = Arrays.stream(map.get(down)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String frontString = Arrays.stream(map.get(front)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String backString = Arrays.stream(map.get(back)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String rightString = Arrays.stream(map.get(right)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String leftString = Arrays.stream(map.get(left)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+
+            String result = "";
+
+            int a = 0;
+            for (int i = 0; i < 9; a++, i++) {
+                a %= 3;
+                if (a == 0) result += "      ";
+                result += upString.charAt(i);
+                if (a == 2) result += "\n";
+            }
+
+            for (int i = 0; i < 9; i += 3) {
+                result += backString.charAt(i + 0);
+                result += backString.charAt(i + 1);
+                result += backString.charAt(i + 2);
+                result += leftString.charAt(i + 0);
+                result += leftString.charAt(i + 1);
+                result += leftString.charAt(i + 2);
+                result += frontString.charAt(i + 0);
+                result += frontString.charAt(i + 1);
+                result += frontString.charAt(i + 2);
+                result += rightString.charAt(i + 0);
+                result += rightString.charAt(i + 1);
+                result += rightString.charAt(i + 2);
+                result += "\n";
+            }
+
+            int b = 0;
+            for (int i = 0; i < 9; b++, i++) {
+                b %= 3;
+                if (b == 0) result += "      ";
+                result += downString.charAt(i);
+                if (b == 2) result += "\n";
+            }
+
+            return result;
         }
 
         public String getShadow(){
-            Map<Object, Character> symbols = new HashMap<>();
+            Map<Enum, Character> symbols = new HashMap<>();
             symbols.put(Color.W, 'W');
             symbols.put(Color.Y, 'Y');
             symbols.put(Color.R, 'R');
@@ -98,30 +126,51 @@ public class Task {
             symbols.put(Color.B, 'B');
             symbols.put(Color.G, 'G');
 
-            return "      " + symbols.get(map.get(upShadow)[0]) + symbols.get(map.get(upShadow)[1]) + symbols.get(map.get(upShadow)[2]) + "\n" +
-                    "      " + symbols.get(map.get(upShadow)[3]) + symbols.get(map.get(upShadow)[4]) + symbols.get(map.get(upShadow)[5]) + "\n" +
-                    "      " + symbols.get(map.get(upShadow)[6]) + symbols.get(map.get(upShadow)[7]) + symbols.get(map.get(upShadow)[8]) + "\n" +
-                    symbols.get(map.get(backShadow)[0]) + symbols.get(map.get(backShadow)[1]) + symbols.get(map.get(backShadow)[2]) +
-                    symbols.get(map.get(leftShadow)[0]) + symbols.get(map.get(leftShadow)[1]) + symbols.get(map.get(leftShadow)[2]) +
-                    symbols.get(map.get(frontShadow)[0]) + symbols.get(map.get(frontShadow)[1]) + symbols.get(map.get(frontShadow)[2]) +
-                    symbols.get(map.get(rightShadow)[0]) + symbols.get(map.get(rightShadow)[1]) + symbols.get(map.get(rightShadow)[2]) + "\n" +
-                    symbols.get(map.get(backShadow)[3]) + symbols.get(map.get(backShadow)[4]) + symbols.get(map.get(backShadow)[5]) +
-                    symbols.get(map.get(leftShadow)[3]) + symbols.get(map.get(leftShadow)[4]) + symbols.get(map.get(leftShadow)[5]) +
-                    symbols.get(map.get(frontShadow)[3]) + symbols.get(map.get(frontShadow)[4]) + symbols.get(map.get(frontShadow)[5]) +
-                    symbols.get(map.get(rightShadow)[3]) + symbols.get(map.get(rightShadow)[4]) + symbols.get(map.get(rightShadow)[5]) + "\n" +
-                    symbols.get(map.get(backShadow)[6]) + symbols.get(map.get(backShadow)[7]) + symbols.get(map.get(backShadow)[8]) +
-                    symbols.get(map.get(leftShadow)[6]) + symbols.get(map.get(leftShadow)[7]) + symbols.get(map.get(leftShadow)[8]) +
-                    symbols.get(map.get(frontShadow)[6]) + symbols.get(map.get(frontShadow)[7]) + symbols.get(map.get(frontShadow)[8]) +
-                    symbols.get(map.get(rightShadow)[6]) + symbols.get(map.get(rightShadow)[7]) + symbols.get(map.get(rightShadow)[8]) + "\n" +
-                    "      " + symbols.get(map.get(downShadow)[0]) + symbols.get(map.get(downShadow)[1]) + symbols.get(map.get(downShadow)[2]) + "\n" +
-                    "      " + symbols.get(map.get(downShadow)[3]) + symbols.get(map.get(downShadow)[4]) + symbols.get(map.get(downShadow)[5]) + "\n" +
-                    "      " + symbols.get(map.get(downShadow)[6]) + symbols.get(map.get(downShadow)[7]) + symbols.get(map.get(downShadow)[8]) + "\n";
+            String upString = Arrays.stream(map.get(upShadow)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String downString = Arrays.stream(map.get(downShadow)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String frontString = Arrays.stream(map.get(frontShadow)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String backString = Arrays.stream(map.get(backShadow)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String rightString = Arrays.stream(map.get(rightShadow)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+            String leftString = Arrays.stream(map.get(leftShadow)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+
+            String result = "";
+
+            int a = 0;
+            for (int i = 0; i < 9; a++, i++) {
+                a %= 3;
+                if (a == 0) result += "      ";
+                result += upString.charAt(i);
+                if (a == 2) result += "\n";
+            }
+
+            for (int i = 0; i < 9; i += 3) {
+                result += backString.charAt(i + 0);
+                result += backString.charAt(i + 1);
+                result += backString.charAt(i + 2);
+                result += leftString.charAt(i + 0);
+                result += leftString.charAt(i + 1);
+                result += leftString.charAt(i + 2);
+                result += frontString.charAt(i + 0);
+                result += frontString.charAt(i + 1);
+                result += frontString.charAt(i + 2);
+                result += rightString.charAt(i + 0);
+                result += rightString.charAt(i + 1);
+                result += rightString.charAt(i + 2);
+                result += "\n";
+            }
+
+            int b = 0;
+            for (int i = 0; i < 9; b++, i++) {
+                b %= 3;
+                if (b == 0) result += "      ";
+                result += downString.charAt(i);
+                if (b == 2) result += "\n";
+            }
+
+            return result;
         }
 
         private void sync() {
-            System.out.println("До sync()");
-            System.out.println(this);
-            System.out.println(getShadow());
             frontShadow = front;
             backShadow = back;
             upShadow = up;
@@ -135,12 +184,16 @@ public class Task {
             orangeShadow = orange.clone();
             blueShadow = blue.clone();
             greenShadow = green.clone();
-            System.out.println("После sync()");
-            System.out.println(this);
-            System.out.println(getShadow());
+
+            mapShadow.put(Color.W, whiteShadow);
+            mapShadow.put(Color.Y, yellowShadow);
+            mapShadow.put(Color.R, redShadow);
+            mapShadow.put(Color.O, orangeShadow);
+            mapShadow.put(Color.G, greenShadow);
+            mapShadow.put(Color.B, blueShadow);
         }
 
-        public int countColors(Color color, Object[] side) {
+        public int countColors(Color color, Enum[] side) {
             int counter = 0;
             for (int i = 0; i < side.length; i++) {
                 if (side[i] == color) counter ++;
@@ -148,7 +201,7 @@ public class Task {
             return counter;
         }
 
-        private void reverseRight(Object side) {
+        private void reverseRight(Enum side) {
             map.get(side)[0] = mapShadow.get(side)[6];
             map.get(side)[1] = mapShadow.get(side)[3];
             map.get(side)[2] = mapShadow.get(side)[0];
@@ -158,7 +211,7 @@ public class Task {
             map.get(side)[7] = mapShadow.get(side)[5];
             map.get(side)[8] = mapShadow.get(side)[2];
         }
-        private void reverseLeft(Object side) {
+        private void reverseLeft(Enum side) {
             map.get(side)[0] = mapShadow.get(side)[2];
             map.get(side)[1] = mapShadow.get(side)[5];
             map.get(side)[2] = mapShadow.get(side)[8];
@@ -180,8 +233,8 @@ public class Task {
             leftShadow = left;
             backShadow = back;
 
-            reverseLeft(up);
-            reverseRight(down);
+            reverseRight(up);
+            reverseLeft(down);
 
             sync();
         }
@@ -197,8 +250,8 @@ public class Task {
             backShadow = back;
             sync();
 
-            reverseRight(up);
-            reverseLeft(down);
+            reverseLeft(up);
+            reverseRight(down);
 
             sync();
         }
@@ -215,13 +268,14 @@ public class Task {
             sync();
 
             reverseRight(up);
+            reverseRight(back);
+            sync();
+
             reverseRight(up);
-
-            reverseRight(back);
             reverseRight(back);
 
-            reverseRight(right);
-            reverseLeft(left);
+            reverseLeft(right);
+            reverseRight(left);
             sync();
         }
         public void turnDown() {
@@ -237,13 +291,14 @@ public class Task {
             sync();
 
             reverseRight(down);
+            reverseRight(back);
+            sync();
+
             reverseRight(down);
-
-            reverseRight(back);
             reverseRight(back);
 
-            reverseRight(left);
-            reverseLeft(right);
+            reverseLeft(left);
+            reverseRight(right);
             sync();
         }
 
@@ -344,8 +399,6 @@ public class Task {
             sync();
         }
         public void moveLeftUp() {
-            System.out.println("До moveLeftUp()");
-            System.out.println(this);
             reverseLeft(left);
             map.get(front)[0] = mapShadow.get(down)[0];
             map.get(front)[3] = mapShadow.get(down)[3];
@@ -360,12 +413,8 @@ public class Task {
             map.get(down)[3] = mapShadow.get(back)[5];
             map.get(down)[6] = mapShadow.get(back)[2];
             sync();
-            System.out.println("После moveLeftUp()");
-            System.out.println(this);
         }
         public void moveLeftDown() {
-            System.out.println("До moveLeftDown()");
-            System.out.println(this);
             reverseRight(left);
             map.get(front)[0] = mapShadow.get(up)[0];
             map.get(front)[3] = mapShadow.get(up)[3];
@@ -380,8 +429,51 @@ public class Task {
             map.get(down)[3] = mapShadow.get(front)[3];
             map.get(down)[6] = mapShadow.get(front)[6];
             sync();
-            System.out.println("После moveLeftDown()");
-            System.out.println(this);
+        }
+
+        public void randomInit() {
+            for (int i = 0; i < 100; i++) {
+                int number = (int) (Math.random() * 12); //12 - Количество функций
+                switch (number) {
+                    case 0:
+                        this.turnUp();
+                        break;
+                    case 1:
+                        this.turnDown();
+                        break;
+                    case 2:
+                        this.turnLeft();
+                        break;
+                    case 3:
+                        this.turnRight();
+                        break;
+                    case 4:
+                        this.moveUpLeft();
+                        break;
+                    case 5:
+                        this.moveUpRight();
+                        break;
+                    case 6:
+                        this.moveDownLeft();
+                        break;
+                    case 7:
+                        this.moveDownRight();
+                        break;
+                    case 8:
+                        this.moveRightDown();
+                        break;
+                    case 9:
+                        this.moveRightUp();
+                        break;
+                    case 10:
+                        this.moveLeftDown();
+                        break;
+                    case 11:
+                        this.moveLeftUp();
+                        break;
+                }
+            }
+
         }
     }
 }
