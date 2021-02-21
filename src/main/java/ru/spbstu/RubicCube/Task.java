@@ -80,41 +80,41 @@ public class Task {
             String rightString = Arrays.stream(map.get(right)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
             String leftString = Arrays.stream(map.get(left)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
 
-            String result = "";
+            StringBuilder result = new StringBuilder();
 
             int a = 0;
             for (int i = 0; i < 9; a++, i++) {
                 a %= 3;
-                if (a == 0) result += "      ";
-                result += upString.charAt(i);
-                if (a == 2) result += "\n";
+                if (a == 0) result.append("      ");
+                result.append(upString.charAt(i));
+                if (a == 2) result.append("\n");
             }
 
             for (int i = 0; i < 9; i += 3) {
-                result += backString.charAt(i + 0);
-                result += backString.charAt(i + 1);
-                result += backString.charAt(i + 2);
-                result += leftString.charAt(i + 0);
-                result += leftString.charAt(i + 1);
-                result += leftString.charAt(i + 2);
-                result += frontString.charAt(i + 0);
-                result += frontString.charAt(i + 1);
-                result += frontString.charAt(i + 2);
-                result += rightString.charAt(i + 0);
-                result += rightString.charAt(i + 1);
-                result += rightString.charAt(i + 2);
-                result += "\n";
+                result.append(backString.charAt(i));
+                result.append(backString.charAt(i + 1));
+                result.append(backString.charAt(i + 2));
+                result.append(leftString.charAt(i));
+                result.append(leftString.charAt(i + 1));
+                result.append(leftString.charAt(i + 2));
+                result.append(frontString.charAt(i));
+                result.append(frontString.charAt(i + 1));
+                result.append(frontString.charAt(i + 2));
+                result.append(rightString.charAt(i));
+                result.append(rightString.charAt(i + 1));
+                result.append(rightString.charAt(i + 2));
+                result.append("\n");
             }
 
             int b = 0;
             for (int i = 0; i < 9; b++, i++) {
                 b %= 3;
-                if (b == 0) result += "      ";
-                result += downString.charAt(i);
-                if (b == 2) result += "\n";
+                if (b == 0) result.append("      ");
+                result.append(downString.charAt(i));
+                if (b == 2) result.append("\n");
             }
 
-            return result;
+            return result.toString();
         }
 
         public String getShadow(){
@@ -133,41 +133,41 @@ public class Task {
             String rightString = Arrays.stream(map.get(rightShadow)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
             String leftString = Arrays.stream(map.get(leftShadow)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
 
-            String result = "";
+            StringBuilder result = new StringBuilder();
 
             int a = 0;
             for (int i = 0; i < 9; a++, i++) {
                 a %= 3;
-                if (a == 0) result += "      ";
-                result += upString.charAt(i);
-                if (a == 2) result += "\n";
+                if (a == 0) result.append("      ");
+                result.append(upString.charAt(i));
+                if (a == 2) result.append("\n");
             }
 
             for (int i = 0; i < 9; i += 3) {
-                result += backString.charAt(i + 0);
-                result += backString.charAt(i + 1);
-                result += backString.charAt(i + 2);
-                result += leftString.charAt(i + 0);
-                result += leftString.charAt(i + 1);
-                result += leftString.charAt(i + 2);
-                result += frontString.charAt(i + 0);
-                result += frontString.charAt(i + 1);
-                result += frontString.charAt(i + 2);
-                result += rightString.charAt(i + 0);
-                result += rightString.charAt(i + 1);
-                result += rightString.charAt(i + 2);
-                result += "\n";
+                result.append(backString.charAt(i));
+                result.append(backString.charAt(i + 1));
+                result.append(backString.charAt(i + 2));
+                result.append(leftString.charAt(i));
+                result.append(leftString.charAt(i + 1));
+                result.append(leftString.charAt(i + 2));
+                result.append(frontString.charAt(i));
+                result.append(frontString.charAt(i + 1));
+                result.append(frontString.charAt(i + 2));
+                result.append(rightString.charAt(i));
+                result.append(rightString.charAt(i + 1));
+                result.append(rightString.charAt(i + 2));
+                result.append("\n");
             }
 
             int b = 0;
             for (int i = 0; i < 9; b++, i++) {
                 b %= 3;
-                if (b == 0) result += "      ";
-                result += downString.charAt(i);
-                if (b == 2) result += "\n";
+                if (b == 0) result.append("      ");
+                result.append(downString.charAt(i));
+                if (b == 2) result.append("\n");
             }
 
-            return result;
+            return result.toString();
         }
 
         private void sync() {
@@ -195,8 +195,8 @@ public class Task {
 
         public int countColors(Color color, Enum[] side) {
             int counter = 0;
-            for (int i = 0; i < side.length; i++) {
-                if (side[i] == color) counter ++;
+            for (Enum anEnum : side) {
+                if (anEnum == color) counter++;
             }
             return counter;
         }
