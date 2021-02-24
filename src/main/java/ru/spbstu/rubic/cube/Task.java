@@ -1,7 +1,6 @@
-package ru.spbstu.RubicCube;
+package ru.spbstu.rubic.cube;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -15,36 +14,36 @@ public class Task {
 
         public enum Color {W, Y, R, O, G, B}
 
-        public Enum[] white = {Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W};
-        public Enum[] yellow = {Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y};
-        public Enum[] red = {Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R};
-        public Enum[] orange = {Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O};
-        public Enum[] green = {Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G};
-        public Enum[] blue = {Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B};
+        public Color[] white = {Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W};
+        public Color[] yellow = {Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y};
+        public Color[] red = {Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R};
+        public Color[] orange = {Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O};
+        public Color[] green = {Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G};
+        public Color[] blue = {Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B};
 
-        private Enum[] whiteShadow = {Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W};
-        private Enum[] yellowShadow = {Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y};
-        private Enum[] redShadow = {Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R};
-        private Enum[] orangeShadow = {Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O};
-        private Enum[] greenShadow = {Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G};
-        private Enum[] blueShadow = {Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B};
+        private Color[] whiteShadow = {Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W, Color.W};
+        private Color[] yellowShadow = {Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y, Color.Y};
+        private Color[] redShadow = {Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R, Color.R};
+        private Color[] orangeShadow = {Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O, Color.O};
+        private Color[] greenShadow = {Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G, Color.G};
+        private Color[] blueShadow = {Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B, Color.B};
 
-        public Enum front = Color.W;
-        public Enum back = Color.Y;
-        public Enum up = Color.G;
-        public Enum down = Color.B;
-        public Enum left = Color.R;
-        public Enum right = Color.O;
+        public Color front = Color.W;
+        public Color back = Color.Y;
+        public Color up = Color.G;
+        public Color down = Color.B;
+        public Color left = Color.R;
+        public Color right = Color.O;
 
-        private Enum frontShadow = Color.W;
-        private Enum backShadow = Color.Y;
-        private Enum upShadow = Color.G;
-        private Enum downShadow = Color.B;
-        private Enum leftShadow = Color.R;
-        private Enum rightShadow = Color.O;
+        private Color frontShadow = Color.W;
+        private Color backShadow = Color.Y;
+        private Color upShadow = Color.G;
+        private Color downShadow = Color.B;
+        private Color leftShadow = Color.R;
+        private Color rightShadow = Color.O;
 
-        private Map<Enum, Enum[]> map = new HashMap<Enum, Enum[]>();
-        private Map<Enum, Enum[]> mapShadow = new HashMap<Enum, Enum[]>();
+        private Map<Color, Color[]> map = new HashMap();
+        private Map<Color, Color[]> mapShadow = new HashMap();
 
         public Cube() {
 
@@ -65,7 +64,7 @@ public class Task {
 
         @Override
         public String toString() {
-            Map<Enum, Character> symbols = new HashMap<>();
+            Map<Color, Character> symbols = new HashMap<>();
             symbols.put(Color.W, 'W');
             symbols.put(Color.Y, 'Y');
             symbols.put(Color.R, 'R');
@@ -118,7 +117,7 @@ public class Task {
         }
 
         public String getShadow(){
-            Map<Enum, Character> symbols = new HashMap<>();
+            Map<Color, Character> symbols = new HashMap<>();
             symbols.put(Color.W, 'W');
             symbols.put(Color.Y, 'Y');
             symbols.put(Color.R, 'R');
@@ -193,15 +192,15 @@ public class Task {
             mapShadow.put(Color.B, blueShadow);
         }
 
-        public int countColors(Color color, Enum[] side) {
+        public int countColors(Color color, Color[] side) {
             int counter = 0;
-            for (Enum anEnum : side) {
-                if (anEnum == color) counter++;
+            for (Color anColor : side) {
+                if (anColor == color) counter++;
             }
             return counter;
         }
 
-        private void reverseRight(Enum side) {
+        private void reverseRight(Color side) {
             map.get(side)[0] = mapShadow.get(side)[6];
             map.get(side)[1] = mapShadow.get(side)[3];
             map.get(side)[2] = mapShadow.get(side)[0];
@@ -211,7 +210,7 @@ public class Task {
             map.get(side)[7] = mapShadow.get(side)[5];
             map.get(side)[8] = mapShadow.get(side)[2];
         }
-        private void reverseLeft(Enum side) {
+        private void reverseLeft(Color side) {
             map.get(side)[0] = mapShadow.get(side)[2];
             map.get(side)[1] = mapShadow.get(side)[5];
             map.get(side)[2] = mapShadow.get(side)[8];

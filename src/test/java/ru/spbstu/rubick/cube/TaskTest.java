@@ -1,7 +1,7 @@
-package ru.spbstu.RubickCube;
+package ru.spbstu.rubick.cube;
 
 import org.junit.*;
-import ru.spbstu.RubicCube.Task;
+import ru.spbstu.rubic.cube.Task;
 
 public class TaskTest {
     @Test
