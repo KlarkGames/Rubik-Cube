@@ -39,6 +39,7 @@ public class Task {
                         "-out [file.txt] - sets where to copy the Cube to file.txt, the standard use is save.txt\n\n" +
                         "Commands for working with the Cube:\n" +
                         "save - save the cube file.txt\n" +
+                        "load - load the cube from file.txt\n" +
                         "gu - go to the top face               gd - go to the bottom edge\n" +
                         "gl - go to the left side              gr - go to the right side\n" +
                         "lu - rotate left face up              ld - turn the left face down\n" +
