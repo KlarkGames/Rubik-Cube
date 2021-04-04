@@ -3,7 +3,44 @@ package ru.spbstu.rubick.cube;
 import org.junit.*;
 import ru.spbstu.rubic.cube.Task;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
 public class TaskTest {
+    @Test
+    public void save() {
+        String text = "";
+        Task.Cube cube = new Task.Cube();
+        cube.randomInit();
+        cube.output("test_save.txt");
+        try(FileReader reader = new FileReader("test_save.txt")) {
+            Scanner scanner = new Scanner(reader);
+            while (scanner.hasNextLine()) {
+                text += scanner.nextLine() + "\n";
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        Assert.assertEquals(text.trim(), cube.toString().trim());
+    }
+
+    @Test
+    public void load() {
+        String text = "";
+        Task.Cube cube = new Task.Cube();
+        cube.load("test_load.txt");
+        try(FileReader reader = new FileReader("test_load.txt")) {
+            Scanner scanner = new Scanner(reader);
+            while (scanner.hasNextLine()) {
+                text += scanner.nextLine() + "\n";
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        Assert.assertEquals(text.trim(), cube.toString().trim());
+    }
+
     @Test
     public void cubeInitTest() {
         Task.Cube cube = new Task.Cube();

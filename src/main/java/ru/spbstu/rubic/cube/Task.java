@@ -1,13 +1,152 @@
 package ru.spbstu.rubic.cube;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 
 
 public class Task {
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        CommandLineArgument values = new CommandLineArgument(args);
+        Scanner console = new Scanner(System.in);
+        Cube cube = new Cube();
+        String inputFile = "save.txt";
+        String outputFile = "save.txt";
 
+        if (values.outputFile != null) outputFile = values.outputFile;
+        if (values.inputFile != null) inputFile = values.inputFile;
+        if (values.random != null) cube.randomInit();
+        if (values.help != null) getHelp(console);
+
+        loop(cube, console, outputFile, inputFile);
+    }
+
+    public static void getHelp(Scanner console) {
+        System.out.println(
+                "Help about working with the Rubik's Cube model\n\n" +
+                        "Flags:\n " +
+                        "-r -random filling of the Rubik's Cube\n " +
+                        "-h - get help about the Rubik's Cube\n" +
+                        "-in [file.txt] - sets where to copy the Rubik's Cube from file.txt, standard used save.txt (If it is not present, it returns an error)\n" +
+                        "-out [file.txt] - sets where to copy the Cube to file.txt, the standard use is save.txt\n\n" +
+                        "Commands for working with the Cube:\n" +
+                        "save - save the cube file.txt\n" +
+                        "gu - go to the top face               gd - go to the bottom edge\n" +
+                        "gl - go to the left side              gr - go to the right side\n" +
+                        "lu - rotate left face up              ld - turn the left face down\n" +
+                        "EN - turning right side up            rd - turn right side down\n" +
+                        "ul - turn the top face to the left    ur - turn the top face to the right\n" +
+                        "dl - turn the bottom face to the left dr - turn the bottom face to the right\n\n" +
+                        "Start the game? (Y/N)"
+        );
+        String command = console.next();
+        while (!command.toLowerCase().equals("y")) {
+            if (command.toLowerCase().equals("n")) {
+                console.close();
+            }
+            else System.out.println("Invalid command, please try again");
+            command = console.next();
+        }
+    }
+
+    public static void loop(Cube cube, Scanner console, String outputFile, String inputFile) {
+        boolean round = true;
+        boolean commandError = false;
+
+        while (round) {
+            System.out.println(cube.getSide());
+
+            if (commandError) {
+                System.out.println("Invalid command, please try again");
+                commandError = false;
+            }
+
+            String command = console.next();
+
+            switch (command.toLowerCase()) {
+                case "gu":
+                    cube.turnUp();
+                    break;
+                case "gd":
+                    cube.turnDown();
+                    break;
+                case "gl":
+                    cube.turnLeft();
+                    break;
+                case "gr":
+                    cube.turnRight();
+                    break;
+                case "ru":
+                    cube.moveRightUp();
+                    break;
+                case "rd":
+                    cube.moveRightDown();
+                    break;
+                case "lu":
+                    cube.moveLeftUp();
+                    break;
+                case "ld":
+                    cube.moveLeftDown();
+                    break;
+                case "ur":
+                    cube.moveUpRight();
+                    break;
+                case "ul":
+                    cube.moveUpLeft();
+                    break;
+                case "dr":
+                    cube.moveDownRight();
+                    break;
+                case "dl":
+                    cube.moveDownLeft();
+                    break;
+                case "exit":
+                    round = false;
+                    break;
+                case "save":
+                    cube.output(outputFile);
+                    break;
+                case "load":
+                    cube.load(inputFile);
+                    break;
+                default:
+                    commandError = true;
+                    break;
+            }
+        }
+    }
+
+    public static class CommandLineArgument {
+
+        @Option(name="-r", usage = "Set is a cube random generated")
+        public Boolean random;
+
+        @Option(name = "-h", usage = "Get help")
+        public Boolean help;
+
+        @Option(name = "-in", usage = "Set a input file")
+        public String inputFile;
+
+        @Option(name = "-out", usage = "Set a output file")
+        public String outputFile;
+
+        public CommandLineArgument(String[] args) {
+            CmdLineParser parser = new CmdLineParser(this);
+
+            try {
+                parser.parseArgument(args);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     public static class Cube {
@@ -42,8 +181,8 @@ public class Task {
         private Color leftShadow = Color.R;
         private Color rightShadow = Color.O;
 
-        private Map<Color, Color[]> map = new HashMap();
-        private Map<Color, Color[]> mapShadow = new HashMap();
+        private final Map<Color, Color[]> map = new HashMap();
+        private final Map<Color, Color[]> mapShadow = new HashMap();
 
         public Cube() {
 
@@ -169,6 +308,29 @@ public class Task {
             return result.toString();
         }
 
+        public String getSide() {
+            Map<Color, Character> symbols = new HashMap<>();
+            symbols.put(Color.W, 'W');
+            symbols.put(Color.Y, 'Y');
+            symbols.put(Color.R, 'R');
+            symbols.put(Color.O, 'O');
+            symbols.put(Color.B, 'B');
+            symbols.put(Color.G, 'G');
+
+            StringBuilder result = new StringBuilder();
+            String frontString = Arrays.stream(map.get(front)).map(symbols::get).map(Object::toString).collect(Collectors.joining(""));
+
+            int a = 0;
+            for (int i = 0; i < 9; a++, i++) {
+                a %= 3;
+                if (a == 0) result.append("      ");
+                result.append(frontString.charAt(i));
+                if (a == 2) result.append("\n");
+            }
+
+            return result.toString();
+        }
+
         private void sync() {
             frontShadow = front;
             backShadow = back;
@@ -198,6 +360,105 @@ public class Task {
                 if (anColor == color) counter++;
             }
             return counter;
+        }
+
+        public void output(String file) {
+            File output = new File(file);
+            try(FileWriter writer = new FileWriter(file, false))
+            {
+                writer.write(this.toString());
+                writer.flush();
+            } catch(IOException ex){
+                System.out.println(ex.getMessage());
+            }
+
+        }
+
+        public void load(String file) {
+            try(FileReader reader = new FileReader(file))
+            {
+                Scanner scanner = new Scanner(reader);
+                String text = "";
+                while(scanner.hasNextLine()) {
+                    text += scanner.nextLine() + "\n";
+                }
+
+                text = text.replaceAll("[ \n\\x0B\f\r\t]","");
+
+                Map<Character, Color> symbols = new HashMap<>();
+                symbols.put('W', Color.W);
+                symbols.put('Y', Color.Y);
+                symbols.put('R', Color.R);
+                symbols.put('O', Color.O);
+                symbols.put('B', Color.B);
+                symbols.put('G', Color.G);
+
+                char[] upSide = new char[9];
+                char[] backSide = new char[9];
+                char[] leftSide = new char[9];
+                char[] frontSide = new char[9];
+                char[] rightSide = new char[9];
+                char[] downSide = new char[9];
+
+                text.getChars(0, 9, upSide, 0);
+
+                text.getChars(9, 12, backSide, 0);
+                text.getChars(21, 24, backSide, 3);
+                text.getChars(33, 36, backSide, 6);
+
+                text.getChars(12, 15, leftSide, 0);
+                text.getChars(24, 27, leftSide, 3);
+                text.getChars(36, 39, leftSide, 6);
+
+                text.getChars(15, 18, frontSide, 0);
+                text.getChars(27, 30, frontSide, 3);
+                text.getChars(39, 42, frontSide, 6);
+
+                text.getChars(18, 21, rightSide, 0);
+                text.getChars(30, 33, rightSide, 3);
+                text.getChars(42, 45, rightSide, 6);
+
+                text.getChars(45, 54, downSide, 0);
+
+                Color[] frontColor = enumColorCreator(frontSide);
+                Color[] backColor = enumColorCreator(backSide);
+                Color[] leftColor = enumColorCreator(leftSide);
+                Color[] rightColor = enumColorCreator(rightSide);
+                Color[] upColor = enumColorCreator(upSide);
+                Color[] downColor = enumColorCreator(downSide);
+
+                colorLoader(front, frontColor);
+                colorLoader(back, backColor);
+                colorLoader(left, leftColor);
+                colorLoader(right, rightColor);
+                colorLoader(up, upColor);
+                colorLoader(down, downColor);
+                sync();
+
+            } catch(IOException ex){
+                System.out.println(ex.getMessage());
+            }
+
+        }
+
+        private void colorLoader(Color sideColor, Color[] loadSide) {
+            for (int i = 0; i < 9; i++) {
+                map.get(sideColor)[i] = loadSide[i];
+            }
+        }
+
+        private Color[] enumColorCreator(char[] side) {
+            return new Color[]{
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(0))),
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(1))),
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(2))),
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(3))),
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(4))),
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(5))),
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(6))),
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(7))),
+                    Color.valueOf(Character.toString(Arrays.toString(side).replaceAll("[\\p{P}, ]","").charAt(8))),
+            };
         }
 
         private void reverseRight(Color side) {
@@ -472,7 +733,6 @@ public class Task {
                         break;
                 }
             }
-
         }
     }
 }
